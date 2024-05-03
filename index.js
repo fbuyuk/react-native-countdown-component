@@ -82,15 +82,14 @@ class CountDown extends React.Component {
       this.setState({ wentBackgroundAt: Date.now() });
     }
   };
-
   updateTimer = () => {
     const now = Date.now();
     if (!this.startTime) {
       this.startTime = now;
     }
-    const diff = now - this.startTime;
-
-    const newUntil = Math.max(0, this.state.until - Math.round(diff / 1000));
+    const diff = Math.round((now - this.startTime) / 1000); // Milisaniye cinsinden değeri saniyeye çevir
+    this.startTime = now;
+    const newUntil = Math.max(0, this.state.until - diff);
     if (newUntil === this.state.until || !this.props.running) {
       return;
     }
