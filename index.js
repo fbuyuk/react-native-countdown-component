@@ -143,6 +143,16 @@ class CountDown extends React.Component {
     }
   };
 
+  getTimeLeft = () => {
+    const { until } = this.state;
+    return {
+      seconds: until % 60,
+      minutes: parseInt(until / 60, 10) % 60,
+      hours: parseInt(until / (60 * 60), 10) % 24,
+      days: parseInt(until / (60 * 60 * 24), 10),
+    };
+  };
+
   renderDoubleDigits = (label, digits) => {
     return (
       <View style={styles.doubleDigitCont}>
