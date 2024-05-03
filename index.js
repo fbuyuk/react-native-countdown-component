@@ -39,7 +39,6 @@ class CountDown extends React.Component {
 
   state = {
     until: Math.max(this.props.until, 0),
-    lastUntil: null,
     wentBackgroundAt: null,
   };
 
@@ -62,7 +61,6 @@ class CountDown extends React.Component {
       this.props.id !== prevProps.id
     ) {
       this.setState({
-        lastUntil: prevState.until,
         until: Math.max(prevProps.until, 0),
       });
     }
@@ -77,7 +75,6 @@ class CountDown extends React.Component {
     ) {
       const diff = (Date.now() - wentBackgroundAt) / 1000.0;
       this.setState({
-        lastUntil: until,
         until: Math.max(0, until - diff),
       });
     }
@@ -87,14 +84,16 @@ class CountDown extends React.Component {
   };
 
   updateTimer = () => {
-    if (this.state.lastUntil === this.state.until || !this.props.running) {
-      return;
-    }
-
     const now = Date.now();
+    if (!this.startTime) {
+      this.startTime = now;
+    }
     const diff = now - this.startTime;
 
     const newUntil = Math.max(0, this.state.until - Math.round(diff / 1000));
+    if (newUntil === this.state.until || !this.props.running) {
+      return;
+    }
 
     if (newUntil === 0) {
       clearInterval(this.timer);
@@ -108,7 +107,6 @@ class CountDown extends React.Component {
     }
 
     this.setState({
-      lastUntil: this.state.until,
       until: newUntil,
     });
   };
